@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bottle Filling Simulation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Bottle Filling Simulation</h1>
+        
+        <!-- Input Section for Initial Parameters -->
+        <div class="form-group">
+            <label for="initial-bottles">Initial Bottles:</label>
+            <input type="number" id="initial-bottles" min="0" max="30" value="5">
+        </div>
+        <div class="form-group">
+            <label for="arrival-rate">Arrival Rate (seconds):</label>
+            <input type="number" id="arrival-rate" min="1" value="10">
+        </div>
+        <div class="form-group">
+            <label for="service-rate">Service Rate (seconds):</label>
+            <input type="number" id="service-rate" min="1" value="5">
+        </div>
+        <button id="simulate-btn">Start Simulation</button>
+
+        <!-- Real-Time Data Section -->
+        <div class="real-time-info">
+            <p id="overflow-alert" style="color: red; font-weight: bold; display: none;">Queue Overflow! Arrival rate exceeds service rate.</p>
+            <p id="bottle-queue">Bottles in Queue: 0</p>
+            <p id="server-utilization">Server Utilization: 0%</p>
+        </div>
+
+        <!-- Conveyor Belt and Server -->
+        <div class="simulation">
+            <div class="conveyor-belt">
+                <!-- Bottles will be dynamically added here -->
+            </div>
+            <div class="server">
+                <img id="server-img" src="assets/server_idle.png" alt="Server">
+                <p id="server-status">Server: Idle</p>
+            </div>
+        </div>
+
+        <!-- Queue Status Bar -->
+        <div id="queue-bar-container">
+            <div id="queue-bar"></div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info">
+            <p id="served-bottles">Served Bottles: 0</p>
+            <p id="queue-size">Queue Size: 0</p>
+        </div>
+
+        <script src="script.js"></script>
+    </div>
+</body>
+</html>
