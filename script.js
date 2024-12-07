@@ -1,118 +1,107 @@
-// Simulation Parameters
-let queue = [];
-let servedBottles = 0;
-let serverBusy = false;
-let queueLength = 30;
-let arrivalRate = 3;
-let serviceRate = 3;
-let initialBottles = 5;
 let simulationInterval;
-let totalTime = 0;
-let busyTime = 0;
+let timeElapsed = 0;
+let bottlesServed = 0;
+let isMachineBusy = false;
 
-// DOM elements
-const simulateBtn = document.getElementById('simulate-btn');
-const conveyorBelt = document.querySelector('.conveyor-belt');
-const serverImg = document.getElementById('server-img');
-const serverStatus = document.getElementById('server-status');
-const servedBottlesElement = document.getElementById('served-bottles');
-const queueSizeElement = document.getElementById('queue-size');
-const bottleQueueElement = document.getElementById('bottle-queue');
-const overflowAlert = document.getElementById('overflow-alert');
-const queueBar = document.getElementById('queue-bar');
-const serverUtilizationElement = document.getElementById('server-utilization');
-
-// Initialize simulation
 function initializeSimulation() {
-    queue = new Array(queueLength).fill(null);
-    servedBottles = 0;
-    serverBusy = false;
-    totalTime = 0;
-    busyTime = 0;
+  const initialBottles = parseInt(
+    document.getElementById("initialBottles").value
+  );
+  const arrivalRate = parseFloat(document.getElementById("arrivalRate").value);
+  const serviceRate = parseFloat(document.getElementById("serviceRate").value);
+  const beltSize = parseInt(document.getElementById("beltSize").value);
 
-    // Add initial bottles
-    for (let i = 0; i < initialBottles; i++) {
-        addBottleToQueue();
-    }
+  let conveyorBelt = Array(initialBottles).fill("bottle");
+  let idleTime = 0;
 
-    updateUI();
-}
+  function renderMetrics() {
+    document.getElementById("timeElapsed").innerText = timeElapsed;
+    document.getElementById("bottlesServed").innerText = bottlesServed;
+    document.getElementById("bottlesOnBelt").innerText = conveyorBelt.length;
+    const utilization = (
+      ((timeElapsed - idleTime) / timeElapsed) *
+      100
+    ).toFixed(2);
+    document.getElementById("serverUtilization").innerText = isNaN(utilization)
+      ? 0
+      : utilization;
+  }
 
-// Add bottle to the queue (conveyor belt)
-function addBottleToQueue() {
-    if (queue.includes(null)) {
-        const bottleImage = document.createElement('img');
-        bottleImage.src = 'assets/bottle.png';
-        conveyorBelt.appendChild(bottleImage);
-        queue[queue.indexOf(null)] = 'bottle';
+  function renderConveyor() {
+    const conveyorDiv = document.getElementById("conveyor");
+    conveyorDiv.innerHTML = "";
+    conveyorBelt.forEach(() => {
+      const bottle = document.createElement("div");
+      bottle.classList.add("bottle");
+      conveyorDiv.appendChild(bottle);
+    });
+  }
+
+  function handleArrival() {
+    if (
+      timeElapsed % Math.round(arrivalRate) === 0 &&
+      conveyorBelt.length < beltSize
+    ) {
+      conveyorBelt.push("bottle");
+      console.log(conveyorBelt + "if push hi");
+    } else if (
+      timeElapsed % Math.round(arrivalRate) === 0 &&
+      conveyorBelt.length >= beltSize
+    ) {
+      console.log(conveyorBelt + "elif push");
+      document.getElementById("overflowMessage").classList.remove("hidden");
+      clearInterval(simulationInterval);
     } else {
-        overflowAlert.style.display = 'block';
     }
-}
+  }
 
-// Serve the bottle from the queue (server processing)
-function serveBottle() {
-    if (!serverBusy && queue.includes('bottle')) {
-        serverBusy = true;
-        serverImg.src = 'assets/server_serving.png';
-        serverStatus.textContent = 'Server: Serving';
+  function handleService() {
+    if (!isMachineBusy && conveyorBelt.length > 0) {
+      isMachineBusy = true;
 
-        const bottleIndex = queue.indexOf('bottle');
-        queue[bottleIndex] = null;
-        conveyorBelt.children[bottleIndex].remove();
-        servedBottles++;
+      conveyorBelt.shift();
+      console.log(conveyorBelt + "remove");
+      bottlesServed++;
 
-        updateUI();
+      document.getElementById("machineState").src = "assets/server_serving.png";
 
-        setTimeout(() => {
-            serverBusy = false;
-            serverImg.src = 'assets/server_idle.png';
-            serverStatus.textContent = 'Server: Idle';
-        }, serviceRate * 1000);
+      setTimeout(() => {
+        isMachineBusy = false;
+
+        if (conveyorBelt.length > 0) {
+          handleService();
+        } else {
+          document.getElementById("machineState").src =
+            "assets/server_idle.png";
+        }
+      }, serviceRate * 1000);
+    } else if (!isMachineBusy) {
+      idleTime++;
     }
+  }
+
+  function simulateStep() {
+    timeElapsed++;
+    handleArrival();
+    handleService();
+    renderMetrics();
+    renderConveyor();
+  }
+
+  renderConveyor();
+  handleArrival();
+  handleService();
+  renderMetrics();
+  renderConveyor();
+  simulationInterval = setInterval(simulateStep, 1000);
 }
 
-// Update the UI
-function updateUI() {
-    const queueCount = queue.filter(x => x).length;
-    queueSizeElement.textContent = `Queue Size: ${queueCount}`;
-    bottleQueueElement.textContent = `Bottles in Queue: ${queueCount}`;
-    servedBottlesElement.textContent = `Served Bottles: ${servedBottles}`;
+document.getElementById("startSimulation").addEventListener("click", () => {
+  clearInterval(simulationInterval);
+  timeElapsed = 0;
+  bottlesServed = 0;
 
-    const queuePercentage = (queueCount / queueLength) * 100;
-    queueBar.style.width = `${queuePercentage}%`;
-    if (queuePercentage < 50) queueBar.style.backgroundColor = 'green';
-    else if (queuePercentage < 80) queueBar.style.backgroundColor = 'yellow';
-    else queueBar.style.backgroundColor = 'red';
-
-    if (queueCount < queueLength) overflowAlert.style.display = 'none';
-
-    // Update server utilization
-    totalTime++;
-    if (serverBusy) busyTime++;
-    const utilization = Math.round((busyTime / totalTime) * 100);
-    serverUtilizationElement.textContent = `Server Utilization: ${utilization}%`;
-}
-
-// Start the simulation
-function startSimulation() {
-    initializeSimulation();
-
-    simulationInterval = setInterval(() => {
-        addBottleToQueue();
-        updateUI();
-    }, arrivalRate * 1000);
-
-    setInterval(() => {
-        serveBottle();
-    }, serviceRate * 1000);
-}
-
-// Attach event listener
-simulateBtn.addEventListener('click', () => {
-    arrivalRate = parseInt(document.getElementById('arrival-rate').value);
-    serviceRate = parseInt(document.getElementById('service-rate').value);
-    initialBottles = parseInt(document.getElementById('initial-bottles').value);
-
-    startSimulation();
+  isMachineBusy = false;
+  document.getElementById("overflowMessage").classList.add("hidden");
+  initializeSimulation();
 });

@@ -8,53 +8,42 @@
 </head>
 <body>
     <div class="container">
-        <h1>Bottle Filling Simulation</h1>
-        
-        <!-- Input Section for Initial Parameters -->
-        <div class="form-group">
-            <label for="initial-bottles">Initial Bottles:</label>
-            <input type="number" id="initial-bottles" min="0" max="30" value="5">
-        </div>
-        <div class="form-group">
-            <label for="arrival-rate">Arrival Rate (seconds):</label>
-            <input type="number" id="arrival-rate" min="1" value="10">
-        </div>
-        <div class="form-group">
-            <label for="service-rate">Service Rate (seconds):</label>
-            <input type="number" id="service-rate" min="1" value="5">
-        </div>
-        <button id="simulate-btn">Start Simulation</button>
+        <h1>D/D/1/K Bottle Filling Simulation</h1>
+        <div class="controls">
+            <label for="initialBottles">Initial Bottles on Conveyor:</label>
+            <input type="number" id="initialBottles" min="0" value="3">
 
-        <!-- Real-Time Data Section -->
-        <div class="real-time-info">
-            <p id="overflow-alert" style="color: red; font-weight: bold; display: none;">Queue Overflow! Arrival rate exceeds service rate.</p>
-            <p id="bottle-queue">Bottles in Queue: 0</p>
-            <p id="server-utilization">Server Utilization: 0%</p>
+            <label for="arrivalRate">Arrival Rate (seconds/bottle):</label>
+            <input type="number" id="arrivalRate" min="1" value="10">
+
+            <label for="serviceRate">Service Rate (seconds/bottle):</label>
+            <input type="number" id="serviceRate" min="1" value="5">
+
+            <label for="beltSize">Conveyor Belt Size:</label>
+            <input type="number" id="beltSize" min="1" value="10">
+
+            <button id="startSimulation">Start Simulation</button>
         </div>
 
-        <!-- Conveyor Belt and Server -->
-        <div class="simulation">
-            <div class="conveyor-belt">
-                <!-- Bottles will be dynamically added here -->
+        <div id="system">
+            <div id="conveyor" class="box">
+                
             </div>
-            <div class="server">
-                <img id="server-img" src="assets/server_idle.png" alt="Server">
-                <p id="server-status">Server: Idle</p>
+            <div id="fillingMachine" class="box">
+                <img id="machineState" src="assets/server_idle.png" alt="Filling Machine">
             </div>
         </div>
 
-        <!-- Queue Status Bar -->
-        <div id="queue-bar-container">
-            <div id="queue-bar"></div>
+        <div class="metrics">
+            <h3>Metrics</h3>
+            <p>Time Elapsed: <span id="timeElapsed">0</span> seconds</p>
+            <p>Bottles Served: <span id="bottlesServed">0</span></p>
+            <p>Bottles on Conveyor: <span id="bottlesOnBelt">0</span></p>
+            <p>Server Utilization: <span id="serverUtilization">0</span>%</p>
         </div>
 
-        <!-- Info Section -->
-        <div class="info">
-            <p id="served-bottles">Served Bottles: 0</p>
-            <p id="queue-size">Queue Size: 0</p>
-        </div>
-
-        <script src="script.js"></script>
+        <p id="overflowMessage" class="hidden">Overflow! Conveyor belt exceeded its limit.</p>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>

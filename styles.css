@@ -1,113 +1,99 @@
 body {
-  font-family: "Arial", sans-serif;
-  background-color: #f3f4f6;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f9;
+    color: #333;
 }
 
 .container {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  max-width: 1000px;
-  padding: 30px;
-  text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
 }
 
-.form-group {
-  margin: 15px 0;
+h1 {
+    margin-bottom: 20px;
+    color: #444;
 }
 
-input[type="number"] {
-  padding: 8px;
-  font-size: 1rem;
-  margin-top: 5px;
-  width: 70%;
-  max-width: 200px;
-  border: 2px solid #ddd;
-  border-radius: 5px;
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.controls label {
+    text-align: left;
+    margin-bottom: 5px;
 }
 
 button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
+    grid-column: span 2;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 button:hover {
-  background-color: #0056b3;
+    background: #0056b3;
 }
 
-.simulation {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  position: relative;
+#system {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
 }
 
-.conveyor-belt {
-  width: 70%;
-  height: 100px;
-  background-color: #eee;
-  border-radius: 10px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+.box {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ccc;
+    margin: 0 10px;
+    background: #fff;
+    border-radius: 5px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
-.conveyor-belt img {
-  width: 50px;
-  height: 50px;
-  margin: 10px;
-  transition: transform 0.3s ease;
+#conveyor {
+    display: flex;
+    gap: 5px;
+    overflow: hidden;
 }
 
-.server {
-  margin-left: 20px;
-  text-align: center;
+.bottle {
+    width: 30px;
+    height: 50px;
+    background: url('assets/bottle.png') no-repeat center;
+    background-size: contain;
 }
 
-.server img {
-  width: 80px;
-  height: 80px;
-  margin-top: 10px;
+#fillingMachine img {
+    width: 100px;
 }
 
-.real-time-info {
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  text-align: center;
+.metrics {
+    text-align: left;
 }
 
-#queue-bar-container {
-  width: 100%;
-  background-color: #ddd;
-  height: 20px;
-  border-radius: 5px;
-  margin-top: 20px;
-  overflow: hidden;
+.metrics p {
+    margin: 5px 0;
 }
 
-#queue-bar {
-  height: 100%;
-  width: 0;
-  background-color: green;
-  transition: width 0.5s ease, background-color 0.5s ease;
+.hidden {
+    display: none;
+}
+
+#overflowMessage {
+    color: red;
+    font-weight: bold;
 }
