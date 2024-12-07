@@ -1,49 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bottle Filling Simulation</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
     <div class="container">
-        <h1>D/D/1/K Bottle Filling Simulation</h1>
-        <div class="controls">
-            <label for="initialBottles">Initial Bottles on Conveyor:</label>
-            <input type="number" id="initialBottles" min="0" value="3">
+      <h1>D/D/1/K Bottle Filling Simulation</h1>
+      <div class="controls">
+        <label for="initialBottles">Initial Bottles on Conveyor:</label>
+        <input type="number" id="initialBottles" min="0" value="3" />
 
-            <label for="arrivalRate">Arrival Rate (seconds/bottle):</label>
-            <input type="number" id="arrivalRate" min="1" value="10">
+        <label for="arrivalRate">Arrival Rate (seconds/bottle):</label>
+        <input type="number" id="arrivalRate" min="1" value="10" />
 
-            <label for="serviceRate">Service Rate (seconds/bottle):</label>
-            <input type="number" id="serviceRate" min="1" value="5">
+        <label for="serviceRate">Service Rate (seconds/bottle):</label>
+        <input type="number" id="serviceRate" min="1" value="5" />
 
-            <label for="beltSize">Conveyor Belt Size:</label>
-            <input type="number" id="beltSize" min="1" value="10">
+        <label for="beltSize">Conveyor Belt Size:</label>
+        <input type="number" id="beltSize" min="1" value="10" />
 
-            <button id="startSimulation">Start Simulation</button>
+        <button id="startSimulation">Start Simulation</button>
+      </div>
+
+      <div id="system">
+        <div id="conveyor" class="box"></div>
+        <div id="fillingMachine" class="box">
+          <img
+            id="machineState"
+            src="assets/server_idle.png"
+            alt="Filling Machine"
+          />
         </div>
+      </div>
 
-        <div id="system">
-            <div id="conveyor" class="box">
-                
-            </div>
-            <div id="fillingMachine" class="box">
-                <img id="machineState" src="assets/server_idle.png" alt="Filling Machine">
-            </div>
-        </div>
+      <div class="metrics">
+        <h3>Metrics</h3>
+        <p>Time Elapsed: <span id="timeElapsed">0</span> seconds</p>
+        <p>Bottles Served: <span id="bottlesServed">0</span></p>
+        <p>Bottles on Conveyor: <span id="bottlesOnBelt">0</span></p>
+        <p>Server Utilization: <span id="serverUtilization">0</span>%</p>
+        <canvas id="utilizationChart" width="400" height="200"></canvas>
+      </div>
 
-        <div class="metrics">
-            <h3>Metrics</h3>
-            <p>Time Elapsed: <span id="timeElapsed">0</span> seconds</p>
-            <p>Bottles Served: <span id="bottlesServed">0</span></p>
-            <p>Bottles on Conveyor: <span id="bottlesOnBelt">0</span></p>
-            <p>Server Utilization: <span id="serverUtilization">0</span>%</p>
-        </div>
-
-        <p id="overflowMessage" class="hidden">Overflow! Conveyor belt exceeded its limit.</p>
+      <p id="overflowMessage" class="hidden">
+        Overflow! Conveyor belt exceeded its limit.
+      </p>
     </div>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

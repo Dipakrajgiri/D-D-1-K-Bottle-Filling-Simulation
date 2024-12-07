@@ -25,6 +25,7 @@ function initializeSimulation() {
     document.getElementById("serverUtilization").innerText = isNaN(utilization)
       ? 0
       : utilization;
+      plotUtilization(utilization);
   }
 
   function renderConveyor() {
@@ -77,6 +78,7 @@ function initializeSimulation() {
       }, serviceRate * 1000);
     } else if (!isMachineBusy) {
       idleTime++;
+      console.log(idleTime)
     }
   }
 
@@ -105,3 +107,65 @@ document.getElementById("startSimulation").addEventListener("click", () => {
   document.getElementById("overflowMessage").classList.add("hidden");
   initializeSimulation();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let utilizationChart; 
+let timeCounter = 0; 
+initializeChart();
+function initializeChart() {
+    const ctx = document.getElementById("utilizationChart").getContext("2d");
+    utilizationChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: [], 
+            datasets: [
+                {
+                    label: "Server Utilization (%)",
+                    data: [],
+                    borderColor: "#007bff",
+                    borderWidth: 2,
+                    fill: false, 
+                },
+            ],
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Time (seconds)",
+                    },
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: "Utilization (%)",
+                    },
+                    min: 0,
+                    max: 100, 
+                },
+            },
+            responsive: true, 
+        },
+    });
+}
+
+
+function plotUtilization(serverUtilization) {
+    timeCounter++; 
+    utilizationChart.data.labels.push(timeCounter);
+    utilizationChart.data.datasets[0].data.push(serverUtilization); 
+    utilizationChart.update(); 
+}
